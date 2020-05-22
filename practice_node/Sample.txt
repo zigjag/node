@@ -1,0 +1,2 @@
+This is a sample text to demonstrate the task of writing to files in Nodejs.This is a new line. Let's where it ends up.
+This is a new line. Let's where it ends up.
