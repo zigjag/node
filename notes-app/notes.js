@@ -25,6 +25,8 @@ const removeNote = (title) => {
 	} else console.log(chalk.bgRed('No note found!'))
 }
 
+debugger
+
 const listNotes = () => {
 	const notes = loadNotes()
 	console.log(chalk.inverse('Your notes'))
@@ -43,12 +45,12 @@ const readNote = (title) => {
 
 const saveNotes = (notes) => {
 	const dataJSON = JSON.stringify(notes)
-	fs.writeFileSync('notes.json', dataJSON)
+	fs.writeFileSync('todo.json', dataJSON)
 }
 
 function loadNotes() {
 	try{
-		const dataBuffer = fs.readFileSync('notes.json')
+		const dataBuffer = fs.readFileSync('todo.json')
 		const dataJSON = dataBuffer.toString()
 		return JSON.parse(dataJSON)	
 	} catch (e){
