@@ -25,8 +25,6 @@ const removeNote = (title) => {
 	} else console.log(chalk.bgRed('No note found!'))
 }
 
-debugger
-
 const listNotes = () => {
 	const notes = loadNotes()
 	console.log(chalk.inverse('Your notes'))
