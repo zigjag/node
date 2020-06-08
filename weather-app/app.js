@@ -1,11 +1,13 @@
-console.log('Starting')
+const request = require('request')
 
-setTimeout(() => {
-    console.log('2 second timer')
-}, 2000)
+let cityName = 'Memphis';
+const key = '792d505e7a9c3b263140201a5658b4fc';
+const url = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}`;
 
-setTimeout(() => {
-    console.log('0 second timer')
-}, 0)
+request({url: url, json: true}, (err, response) => {
+	const data = response.body;
 
-console.log('Stopping')
+	console.log(data.city)
+	console.log(data.list[0].main);
+});
+
