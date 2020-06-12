@@ -1,13 +1,11 @@
-const request = require('request')
+const chalk = require('chalk');
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
 
-let cityName = 'Memphis';
-const key = '792d505e7a9c3b263140201a5658b4fc';
-const url = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${key}`;
-
-request({url: url, json: true}, (err, response) => {
-	const data = response.body;
-
-	console.log(data.city)
-	console.log(data.list[0].main);
+geocode('Los Angeles', (error, result) => {
+	error ? console.log(chalk.bgRed(error)) : console.log(chalk.bgGreen(result))
 });
 
+forecast('Los Angeles', (err, data) => {
+	err ? console.log(chalk.bgRed(err)) : console.log(chalk.bgGreen(data));
+});
