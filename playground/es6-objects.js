@@ -20,7 +20,7 @@ const product = {
 // const {label: productLabel, stock, rating = 5} = product;
 // console.log(productLabel, stock, rating);
 
-function transaction(type, { label, stock }){
+function transaction(type, { label, stock=0 } = {}){
 	console.log(type, label, stock);
 }
 

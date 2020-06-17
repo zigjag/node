@@ -4,7 +4,7 @@ const request = require('request');
 const key = process.env.API_KEY
 
 function geocode(address, callback){
-		const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(address)}&appid=${key}`;
+		const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(address)}&units=imperial&appid=${key}`;
 		request({url, json: true}, (error, {body}) => {
 			if(error) callback('Unable to connect to location services.', undefined);
 			else if(body.message){
@@ -12,12 +12,13 @@ function geocode(address, callback){
 			} else {
 				const {name} = body;
 				const {country} = body.sys;
+				const {main, description} = body.weather[0]
 				const {lon: longitude, lat: latitude} = body.coord;
 				const {temp, feels_like} = body.main;
 				callback(undefined, {
 					longitude,
 					latitude,
-					statement: `The current temp in ${name}, ${country} is ${temp}, but it feels like ${feels_like}.`
+					statement: `The current weather in ${name}, ${country} is ${temp}°F with ${description}, but it feels like ${feels_like}°F.`
 				})
 			}
 		});
