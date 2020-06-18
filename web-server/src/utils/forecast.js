@@ -13,10 +13,13 @@ function forecast(lat, lon, callback){
 			callback('Unable to find location. Try search again.', undefined)
 		} else {
 			const {name, country} = body.city;
-			const {temp, feels_like} = body.list[0].main;
+			const {temp, feels_like, temp_min, temp_max, humidity} = body.list[0].main;
 			const {main, description} = body.list[0].weather[0];
+			const {speed, deg} = body.list[0].wind;
 			const data = body;
-			callback(undefined, `The forecasted weather in ${name}, ${country} is ${temp}°F with ${description}, but it feels like ${feels_like}F°.`)
+			callback(undefined, `The forecasted temperature in ${name}, ${country} is ${temp}°F (feels like ${feels_like}F°).`
+			+ ` The high temperature is ${temp_max}, and the low temperature is ${temp_min}.`
+			+ ` The weather will be ${description}, ${humidity}% humidity, and have wind speeds of ${speed} mph at ${deg} degrees.`)
 		}
 	});
 }
