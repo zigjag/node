@@ -15,7 +15,7 @@ function forecast(lat, lon, callback){
 			const {temp, feels_like} = body.list[0].main;
 			const {main, description} = body.list[0].weather[0];
 			const data = body;
-			callback(undefined, `The forecasted weather in ${name}, ${country} is ${temp}°F with ${description}, but it feels like ${feels_like}F°`)
+			callback(undefined, `The forecasted weather in ${name}, ${country} is ${temp}°F with ${description}, but it feels like ${feels_like}F°.`)
 		}
 	});
 }
