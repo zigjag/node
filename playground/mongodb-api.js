@@ -11,10 +11,11 @@ MongoClient.connect(connectionURL, {
 
   const db = client.db(databaseName)
 
-  // One of the methods below 
+  // One of the methods below
 })
 
 // ----------------Methods----------------
+  //----------Insert Methods----------
 db.collection('users').insertOne({
 	_id: id,
 	name: 'Vikram',
@@ -54,7 +55,7 @@ db.collection('tasks').insertMany([
 	if(err) console.log('Unable to inseret documents.');
 	console.log(result.ops);
 });
-
+  //----------Find Methods-----------
 db.collection('users').findOne({_id: new ObjectID('5eeddbab980c41867be8ff18')}, (err, user) => {
   if(err) console.log('Unable to fetch.');
   console.log(user)
@@ -67,3 +68,30 @@ db.collection('users').find({age: 27}).toArray((err, results) => {
 db.collection('users').find({age: 27}).count((err, results) => {
   console.log(results)
 });
+
+  //-----------Update Methods----------
+  db.collection('users').updateOne({
+    _id: new ObjectID('5eeddbab980c41867be8ff18')
+  }, {
+    $set: { // or use $inc to increment a number ({age: 1} increases by 1, {age: -1} decreases by 1)
+      name: 'Clark'
+    }
+  }).then((result) => {
+    console.log(result);
+  }).catch((error) => {
+    console.log(error);
+  });
+
+  db.collection('tasks').updateMany({}, {
+    $set: {
+      completed: true
+    }
+  }).then((result) => {
+    console.log(result.modifiedCount)
+  }).catch(error => console.log(error));
+
+  //Delete methods
+  db.collection('users').deleteMany({
+    age: 27
+  }).then(result => console.log(result))
+  .catch(error => console.log(error))
