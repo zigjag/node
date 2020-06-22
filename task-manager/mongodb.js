@@ -16,9 +16,9 @@ MongoClient.connect(connectionURL, {
 
   const db = client.db(databaseName);
 
-  db.collection('tasks').deleteOne({
-    description: "Workout"
-  }).then(result => console.log(result))
-  .catch(error => console.log(error));
+  // db.collection('tasks').deleteOne({
+  //   description: "Workout"
+  // }).then(result => console.log(result))
+  // .catch(error => console.log(error));
 
 });
