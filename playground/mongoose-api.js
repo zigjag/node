@@ -1,3 +1,5 @@
+//https://mongoosejs.com/docs/api.html
+
 // -----------------------Setup----------------------
 const mongoose = require('mongoose');
 
@@ -47,6 +49,16 @@ User.findById(_id).then((user) => {
 
 
 //---------------------Update Methods----------------
-
+User.findByIdAndUpdate("5ef05d9e79394c88325ebe92", {age: 1}).then((user) => {
+  console.log(user);
+  return User.countDocuments({age: 30})
+}).then((result) => {
+  console.log(result)
+}).catch(e => console.log(e))
 
 //---------------------Delete Methods----------------
+Task.findByIdAndDelete("5ef1e522925f7c5b7f1b8e5a").then(task => {
+  console.log(task);
+  return Task.countDocuments({completed: false})
+}).then(result => console.log(result))
+.catch(e => console.log(e))
