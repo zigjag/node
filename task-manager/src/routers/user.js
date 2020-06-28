@@ -1,37 +1,71 @@
 const express = require('express');
 const User = require('../models/user');
 const router = express.Router();
+const auth = require('../middleware/auth');
 
 router.route('/users')
-.get(async (req, res) => {
-  await User.find({})
-  .then((result) => res.send(result))
-  .catch(e => res.status(500).send(e))
-})
 .post(async (req, res) => {
   const user = new User(req.body);
 
   try{
     await user.save()
-    res.status(201).send(user)
+    const token = await user.generateAuthToken();
+    res.status(201).send({user, token})
   } catch (e) {
     res.status(400).send(e)
   }
 })
 
-router.route('/users/:id')
-.get(async (req, res) => {
-  const _id = req.params.id;
+router.route('/users/login')
+.post(async (req, res) => {
   try{
-    const user = await User.findById({_id})
-    if(!user) return res.status(404).send();
-
-    res.send(user)
+    const user = await User.findByCredentials(req.body.email, req.body.password);
+    const token = await user.generateAuthToken();
+    res.send({user, token});
   } catch(e) {
+    res.status(400).send();
+  }
+})
+
+router.route('/users/logout')
+.post(auth, async (req, res) => {
+  try{
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token !== req.token;
+    });
+    await req.user.save();
+
+    res.send();
+  } catch(e){
     res.status(500).send();
   }
 })
-.patch(async (req, res) => {
+
+router.route('/users/logoutAll')
+.post(auth, async (req, res) => {
+  try{
+    req.user.tokens = [];
+    await req.user.save();
+
+    res.send();
+  } catch(e){
+    res.status(500).send();
+  }
+})
+
+router.route('/users/me')
+.get(auth, async (req, res) => {
+  res.send(req.user);
+})
+.delete(auth, async (req, res) => {
+  try{
+    await req.user.remove();
+    res.send(req.user)
+  } catch(e){
+    res.status(500).send()
+  }
+})
+.patch(auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "email", "password", "age"];
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -41,21 +75,11 @@ router.route('/users/:id')
   }
 
   try{
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidator: true})
-
-    if(!user) return res.status(404).send();
-    res.send(user);
+    updates.forEach((update) => req.user[update] = req.body[update])
+    await req.user.save();
+    res.send(req.user);
   } catch(e){
     res.status(400).send(e);
-  }
-})
-.delete(async (req, res) => {
-  try{
-    const user = await User.findByIdAndDelete(req.params.id)
-    if(!user) res.status(404).send()
-    res.send(user)
-  } catch(e){
-    res.status(500).send()
   }
 })
 
